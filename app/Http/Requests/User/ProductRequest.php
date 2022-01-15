@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShopRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class ShopRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:65',
-            'description' => 'required|min:3|max:65',
-            'logo' => 'sometimes|required|image|mimes:jpeg,png,jpg,svg',
+            //
         ];
     }
 }

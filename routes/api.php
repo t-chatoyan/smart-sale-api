@@ -19,4 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'user'], function () {
     Route::post('login', [\App\Http\Controllers\User\UserController::class, 'login']);
     Route::resource('shop', \App\Http\Controllers\User\ShopController::class);
+    Route::resource('product', \App\Http\Controllers\User\ProductController::class);
 });
+Route::resource('category', \App\Http\Controllers\CategoryController::class);

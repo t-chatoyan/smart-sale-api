@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\MediaResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShopResource extends JsonResource
@@ -18,7 +19,7 @@ class ShopResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'logo' => $this->logo,
+            'logo' => new MediaResource($this->media->first()),
             'branches' => BranchResource::collection($this->branches),
         ];
     }

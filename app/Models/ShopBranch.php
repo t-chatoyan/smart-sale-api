@@ -17,6 +17,7 @@ class ShopBranch extends Model
         'shop_id'
     ];
 
+
     const IMAGE_SETTINGS = [
         'images' => [
             'sizes' => [

@@ -42,12 +42,22 @@ class ShopController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ShopRequest $request
+     * @return ShopResource
      */
     public function store(ShopRequest $request)
     {
-        //
+        $data = $request->all();
+        $shop = Shop::create($data);
+
+        if ($request->hasFile('logo')) {
+            $shop->addMediaFromRequest('logo')->toMediaCollection('shop_logo', 'public');
+        }
+
+
+        $shop->branches()->createMany($data['branches']);
+
+        return new ShopResource($shop);
     }
 
     /**
@@ -57,33 +67,26 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        $shop = Shop::find($id);
+        $shop = Shop::findOrFail($id);
         $shop->load('branches');
 
         return new ShopResource($shop);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param ShopRequest $request
+     * @param $id
+     * @return ShopResource
      */
-    public function update(Request $request, $id)
+    public function update(ShopRequest $request, $id)
     {
-        //
+        $data = $request->all();
+        $shop = Shop::create($data);
+        $shop->branches()->createMany($data['branches']);
+
+        return new ShopResource($shop);
     }
 
     /**
@@ -94,6 +97,16 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $shop = Shop::find($id);
+
+        if ($shop) {
+            $shop->delete();
+            return response([
+                "message" => "Shop deleted successfully!"
+            ], 200);
+        }
+        return response([
+            "message" => "Shop not found!"
+        ], 400);
     }
 }

@@ -47,6 +47,7 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $product = Product::create($data);
+        $product->categories()->sync($request->get('categories'));
 
         if ($request->hasFile('photos')) {
             $product->addMultipleMediaFromRequest(['photos'])->each(function ($fileAdder) {

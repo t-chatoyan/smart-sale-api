@@ -62,12 +62,15 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return ProductResource
      */
     public function show($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->load('categories');
+
+        return new ProductResource($product);
     }
 
     /**

@@ -28,6 +28,8 @@ class ProductResource extends JsonResource
             'discount' => $this->discount,
             'in_stock' => $this->in_stock,
             'is_available' => $this->is_available,
+            'owner' => $this->owner,
+            'shop' => $this->shop,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'photos' => MediaResource::collection($this->media)

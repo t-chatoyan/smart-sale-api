@@ -22,6 +22,8 @@ class Product extends Model implements HasMedia
        'old_price',
        'discount',
        'in_stock',
+       'shop_id',
+       'owner_id',
        'is_available'
     ];
 
@@ -47,7 +49,12 @@ class Product extends Model implements HasMedia
 
     public function owner()
     {
-        return $this->belongsTo('App\User','owner_id','id');
+        return $this->belongsTo('App\Models\User','owner_id','id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo('App\Models\Shop','shop_id','id');
     }
 
     public function registerMediaConversions(Media $media = null): void

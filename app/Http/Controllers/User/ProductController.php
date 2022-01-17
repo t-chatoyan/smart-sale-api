@@ -46,6 +46,8 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $data = $request->all();
+        $data['owner_id'] = auth()->id();
+
         $product = Product::create($data);
         $product->categories()->sync($request->get('categories'));
 
@@ -74,17 +76,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -104,6 +95,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+
+        if ($product) {
+            $product->delete();
+            return response([
+                "message" => "Shop deleted successfully!"
+            ], 200);
+        }
+        return response([
+            "message" => "Shop not found!"
+        ], 400);
     }
 }

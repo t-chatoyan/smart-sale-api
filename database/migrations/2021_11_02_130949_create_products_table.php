@@ -25,7 +25,11 @@ class CreateProductsTable extends Migration
             $table->integer('discount')->nullable();
             $table->integer('in_stock')->nullable();
             $table->boolean('is_available')->default(true);
+            $table->unsignedBigInteger('owner_id')->nullable();
+            $table->unsignedBigInteger('shop_id')->nullable();
 
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

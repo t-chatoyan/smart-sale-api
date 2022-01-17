@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 // user api
 Route::group(['prefix' => 'user'], function () {
     Route::post('login', [\App\Http\Controllers\User\UserController::class, 'login']);
-    Route::resource('shop', \App\Http\Controllers\User\ShopController::class);
-    Route::resource('product', \App\Http\Controllers\User\ProductController::class);
+    Route::group(['middleware' => ['jwt.verify:user']], function () {
+        Route::get('all-shops', [\App\Http\Controllers\User\ShopController::class, 'getAllShops']);
+        Route::resource('shop', \App\Http\Controllers\User\ShopController::class);
+        Route::resource('product', \App\Http\Controllers\User\ProductController::class);
+        Route::resource('category', \App\Http\Controllers\User\CategoryController::class);
+    });
 });
-Route::resource('category', \App\Http\Controllers\CategoryController::class);

@@ -10,6 +10,18 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getAllShops(Request $request)
+    {
+        $shops = Shop::where('owner_id', auth()->id())->orderBy('id', 'DESC')->get();
+
+        return ShopResource::collection($shops);
+    }
+
     /**
      * Display a listing of the shop.
      *

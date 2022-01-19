@@ -17,7 +17,10 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::orderBy('id', 'DESC');
+        $products = Product::whereHas('shop', function($q){
+                $q->where('owner_id', auth()->id());
+            })->orderBy('id', 'DESC');
+
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
         $count = $products->count();

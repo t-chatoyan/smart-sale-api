@@ -29,6 +29,7 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
+
         $shops = Shop::where('owner_id', auth()->id())->with('branches')->orderBy('id', 'DESC');
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
@@ -60,14 +61,16 @@ class ShopController extends Controller
     public function store(ShopRequest $request)
     {
         $data = $request->all();
+        $data['owner_id'] = auth('user')->id();
         $shop = Shop::create($data);
 
         if ($request->hasFile('logo')) {
             $shop->addMediaFromRequest('logo')->toMediaCollection('shop_logo', 'public');
         }
 
-
-        $shop->branches()->createMany($data['branches']);
+        if ($data['branches'] && count($data['branches'])) {
+            $shop->branches()->createMany($data['branches']);
+        }
 
         return new ShopResource($shop);
     }

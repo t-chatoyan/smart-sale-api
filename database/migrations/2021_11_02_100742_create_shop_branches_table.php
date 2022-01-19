@@ -15,10 +15,10 @@ class CreateShopBranchesTable extends Migration
     {
         Schema::create('shop_branches', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('address');
             $table->json('phone_numbers')->nullable();
-            $table->json('working_days');
+            $table->json('working_days')->nullable();
             $table->unsignedBigInteger('shop_id')->nullable();
 
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');

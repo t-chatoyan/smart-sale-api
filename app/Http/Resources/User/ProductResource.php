@@ -30,9 +30,10 @@ class ProductResource extends JsonResource
             'is_available' => $this->is_available,
             'owner' => $this->owner,
             'shop' => $this->shop,
+            'photos' => MediaResource::collection($this->media),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'photos' => MediaResource::collection($this->media)
+            'status' => $this->deleted_at ? 'inactive' : 'active'
         ];
     }
 }

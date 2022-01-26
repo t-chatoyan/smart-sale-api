@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::whereHas('shop', function($q){
+        $products = Product::withTrashed()->with('categories')->whereHas('shop', function($q){
                 $q->where('owner_id', auth()->id());
             })->orderBy('id', 'DESC');
 
@@ -72,8 +72,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
-        $product->load('categories');
+        $product = Product::with('categories', 'shop')->where('id', $id)->where('owner_id', auth()->id())->first();
 
         return new ProductResource($product);
     }
@@ -81,13 +80,30 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ProductRequest $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return ProductResource
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        dd($data);
+        $data['owner_id'] = auth()->id();
+        $product = Product::findOrFail($id);
+
+        if ($request->hasFile('photos')) {
+            $product->addMultipleMediaFromRequest(['photos'])->each(function ($fileAdder) {
+                $fileAdder->toMediaCollection('product_photos', 'public');
+            });
+        }
+
+        $product->categories()->sync($request->get('categories'));
+        $product->update($data);
+
+        return response()->json([
+            'data' => new ProductResource($product),
+            'message' => 'Product updated successfully!'
+        ],200);
     }
 
     /**
@@ -98,16 +114,43 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
 
-        if ($product) {
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $deleteType = null;
+
+        if(!$product->trashed()){
             $product->delete();
-            return response([
-                "message" => "Shop deleted successfully!"
-            ], 200);
+            $deleteType = 'delete';
         }
-        return response([
-            "message" => "Shop not found!"
-        ], 400);
+        else {
+            $deleteType = 'forceDelete';
+            $product->forceDelete();
+        }
+
+        return response()->json([
+            'status' => true,
+            'deleteType' => $deleteType,
+            'message' => 'Product has been deleted successfully!'
+        ], 200);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restore($id)
+    {
+
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $product->restore();
+
+        return response()->json([
+            'status'   => true,
+            'data' => new ProductResource($product),
+            'message'  => 'Product has been restored successfully!'
+        ], 200);
     }
 }

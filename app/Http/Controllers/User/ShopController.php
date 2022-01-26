@@ -112,16 +112,42 @@ class ShopController extends Controller
      */
     public function destroy($id)
     {
-        $shop = Shop::find($id);
+        $shop = Shop::withTrashed()->findOrFail($id);
 
-        if ($shop) {
+        $deleteType = null;
+
+        if(!$shop->trashed()){
             $shop->delete();
-            return response([
-                "message" => "Shop deleted successfully!"
-            ], 200);
+            $deleteType = 'delete';
         }
-        return response([
-            "message" => "Shop not found!"
-        ], 400);
+        else {
+            $deleteType = 'forceDelete';
+            $shop->forceDelete();
+        }
+
+        return response()->json([
+            'status' => true,
+            'deleteType' => $deleteType,
+            'message' => 'Shop has been deleted successfully!'
+        ], 200);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restore($id)
+    {
+
+        $shop = Shop::withTrashed()->findOrFail($id);
+
+        $shop->restore();
+
+        return response()->json([
+            'status'   => true,
+            'data' => new ShopResource($shop),
+            'message'  => 'Shop has been restored successfully!'
+        ], 200);
     }
 }

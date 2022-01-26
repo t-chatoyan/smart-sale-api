@@ -18,18 +18,21 @@ class ShopSeeder extends Seeder
                 [
                     'name' => 'Sali shoes',
                     'description' => '<p>SALI կոշիկի խանութ-սրահներն</p>',
+                    'owner_id' => 1,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
                 [
                     'name' => 'name',
                     'description' => '<p>name name name name name name</p>',
+                    'owner_id' => 1,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
                 [
                     'name' => 'name',
                     'description' => '<p>name name name name name name</p>',
+                    'owner_id' => 1,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

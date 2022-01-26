@@ -19,6 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('image')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

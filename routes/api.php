@@ -20,8 +20,16 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('login', [\App\Http\Controllers\User\UserController::class, 'login']);
     Route::group(['middleware' => ['jwt.verify:user']], function () {
         Route::get('all-shops', [\App\Http\Controllers\User\ShopController::class, 'getAllShops']);
+
+        //ShopController
         Route::resource('shop', \App\Http\Controllers\User\ShopController::class);
+        Route::get('shop/{id}/restore', [\App\Http\Controllers\User\ShopController::class, 'restore']);
+
+        //ProductController
         Route::resource('product', \App\Http\Controllers\User\ProductController::class);
+        Route::get('product/{id}/restore', [\App\Http\Controllers\User\ProductController::class, 'restore']);
+
         Route::resource('category', \App\Http\Controllers\User\CategoryController::class);
+
     });
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\MediaResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,6 +32,7 @@ class ProductResource extends JsonResource
             'owner' => $this->owner,
             'shop' => $this->shop,
             'photos' => MediaResource::collection($this->media),
+            'categories' => CategoryResource::collection($this->categories),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'status' => $this->deleted_at ? 'inactive' : 'active'

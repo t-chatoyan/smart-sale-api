@@ -29,11 +29,14 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-
         $shops = Shop::where('owner_id', auth()->id())->with('branches');
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
         $count = $shops->count();
+
+        if ($search = $request->input('search')) {
+            $shops = $shops->where('name', 'like', "%{$search}%");;
+        }
 
         if ($request->input('sort')) {
             $sort = explode(".", $request->input('sort'));
@@ -41,7 +44,6 @@ class ShopController extends Controller
         } else {
             $shops = $shops->orderBy('id', 'DESC');
         }
-
 
         if ($page) {
             $skip = $take * ($page - 1);

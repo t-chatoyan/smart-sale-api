@@ -19,8 +19,12 @@ class ProductController extends Controller
     {
 
         $products = Product::withTrashed()->with('categories')->whereHas('shop', function($q){
-                $q->where('owner_id', auth()->id());
+            $q->where('owner_id', auth()->id());
         });
+
+        if ($search = $request->input('search')) {
+            $products = $products->where('name', 'like', "%{$search}%");;
+        }
 
         if ($request->input('sort')) {
             $sort = explode(".", $request->input('sort'));
@@ -95,7 +99,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        dd($data);
+
         $data['owner_id'] = auth()->id();
         $product = Product::findOrFail($id);
 

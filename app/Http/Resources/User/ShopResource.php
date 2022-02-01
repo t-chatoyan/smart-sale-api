@@ -21,6 +21,7 @@ class ShopResource extends JsonResource
             'description' => $this->description,
             'logo' => new MediaResource($this->media->first()),
             'branches' => BranchResource::collection($this->branches),
+            'status' => $this->deleted_at ? 'inactive' : 'active'
         ];
     }
 }

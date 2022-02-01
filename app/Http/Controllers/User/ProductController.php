@@ -17,7 +17,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-
         $products = Product::withTrashed()->with('categories')->whereHas('shop', function($q){
             $q->where('owner_id', auth()->id());
         });
@@ -36,7 +35,6 @@ class ProductController extends Controller
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
         $count = $products->count();
-
 
         if ($page) {
             $skip = $take * ($page - 1);
@@ -84,7 +82,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('categories', 'shop')->where('id', $id)->where('owner_id', auth()->id())->first();
+        $product = Product::withTrashed()->with('categories', 'shop')->where('id', $id)->where('owner_id', auth()->id())->first();
 
         return new ProductResource($product);
     }

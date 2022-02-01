@@ -34,15 +34,6 @@ class Product extends Model implements HasMedia
 
     protected $appends = ['photos'];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function($model) {
-            $model->categories()->detach();
-        });
-    }
-
     public function categories()
     {
         return $this->belongsToMany('App\Models\Category', 'category_product')->withPivot('product_id');

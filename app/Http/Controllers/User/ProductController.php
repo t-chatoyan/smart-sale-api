@@ -17,9 +17,17 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+
         $products = Product::withTrashed()->with('categories')->whereHas('shop', function($q){
                 $q->where('owner_id', auth()->id());
-            })->orderBy('id', 'DESC');
+        });
+
+        if ($request->input('sort')) {
+            $sort = explode(".", $request->input('sort'));
+            $products = $products->orderBy($sort[0], $sort[1]);
+        } else {
+            $products = $products->orderBy('id', 'DESC');
+        }
 
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;

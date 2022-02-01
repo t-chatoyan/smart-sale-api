@@ -30,10 +30,17 @@ class ShopController extends Controller
     public function index(Request $request)
     {
 
-        $shops = Shop::where('owner_id', auth()->id())->with('branches')->orderBy('id', 'DESC');
+        $shops = Shop::where('owner_id', auth()->id())->with('branches');
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
         $count = $shops->count();
+
+        if ($request->input('sort')) {
+            $sort = explode(".", $request->input('sort'));
+            $shops = $shops->orderBy($sort[0], $sort[1]);
+        } else {
+            $shops = $shops->orderBy('id', 'DESC');
+        }
 
 
         if ($page) {

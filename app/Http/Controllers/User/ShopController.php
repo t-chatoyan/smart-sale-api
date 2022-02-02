@@ -29,7 +29,7 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $shops = Shop::where('owner_id', auth()->id())->with('branches');
+        $shops = Shop::withTrashed()->where('owner_id', auth()->id())->with('branches');
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
         $count = $shops->count();
@@ -91,7 +91,7 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::withTrashed()->findOrFail($id);
         $shop->load('branches');
 
         return new ShopResource($shop);
@@ -107,7 +107,8 @@ class ShopController extends Controller
     public function update(ShopRequest $request, $id)
     {
         $data = $request->all();
-        $shop = Shop::create($data);
+        $shop = Shop::withTrashed()->where('id', $id);
+        $shop->update($data);
         $shop->branches()->createMany($data['branches']);
 
         return new ShopResource($shop);

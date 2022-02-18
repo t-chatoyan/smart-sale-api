@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\User\ProductResource;
 use App\Models\Product;
 use App\Models\Test;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\Support\MediaLibraryPro;
 
 class ProductController extends Controller
 {
@@ -75,7 +77,8 @@ class ProductController extends Controller
         $tests = Test::orderBy('id', 'DESC')->get();
 
         return response()->json([
-            'data' => $tests
+            'data' => $tests,
+            'count' =>  $tests->count()
         ], 200);
     }
 }

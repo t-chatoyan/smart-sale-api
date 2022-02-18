@@ -29,7 +29,24 @@ Route::group(['prefix' => 'user'], function () {
         Route::resource('product', \App\Http\Controllers\User\ProductController::class);
         Route::get('product/{id}/restore', [\App\Http\Controllers\User\ProductController::class, 'restore']);
 
+        //MediaController
+        Route::delete('media/{uuid}', [\App\Http\Controllers\User\MediaController::class, 'destroy']);
+
         Route::resource('category', \App\Http\Controllers\User\CategoryController::class);
 
     });
 });
+
+// customer api
+Route::group(['prefix' => 'customer'], function () {
+    //CategoryController
+    Route::get('category', [\App\Http\Controllers\Customer\CategoryController::class, 'index']);
+    Route::get('category/{id}', [\App\Http\Controllers\Customer\CategoryController::class, 'show']);
+
+    //ProductController
+    Route::get('product', [\App\Http\Controllers\Customer\ProductController::class, 'index']);
+    Route::get('product/{id}', [\App\Http\Controllers\Customer\ProductController::class, 'show']);
+});
+
+Route::post('test', [\App\Http\Controllers\Customer\ProductController::class, 'test']);
+Route::get('test', [\App\Http\Controllers\Customer\ProductController::class, 'shoTest']);

@@ -7,6 +7,7 @@ use App\Http\Requests\User\ProductRequest;
 use App\Http\Resources\User\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductController extends Controller
 {

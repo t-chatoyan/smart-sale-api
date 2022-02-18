@@ -17,6 +17,7 @@ class MediaResource extends JsonResource
         return [
             'uuid' => $this->uuid,
             'url' => $this->getUrl(),
+            'id' => $this->id,
             'conversions' => [
                 'small' => $this->getUrl('small'),
                 'medium' => $this->getUrl('medium')

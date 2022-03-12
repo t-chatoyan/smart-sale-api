@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopRequest;
 use App\Http\Resources\User\ShopResource;
 use App\Models\Shop;
+use App\Models\ShopBranch;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -98,18 +99,28 @@ class ShopController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param ShopRequest $request
+     * @param Request $request
      * @param $id
      * @return ShopResource
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig
      */
-    public function update(ShopRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
+        $data = $request->except('branches', 'logo');
         $shop = Shop::withTrashed()->where('id', $id);
         $shop->update($data);
-        $shop->branches()->createMany($data['branches']);
+
+        $shop = $shop->first();
+        if ($request->hasFile('logo')) {
+            $shop->media()->delete();
+            $shop->addMediaFromRequest('logo')->toMediaCollection('shop_logo', 'public');
+        }
+
+        $branches = $request->branches;
+        if ($branches && count($branches)) {
+            $shop->branches()->createMany($branches);
+        }
 
         return new ShopResource($shop);
     }
@@ -160,4 +171,21 @@ class ShopController extends Controller
             'message'  => 'Shop has been restored successfully!'
         ], 200);
     }
+
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteShopBranch($id)
+    {
+        $shop = ShopBranch::findOrFail($id);
+        $shop->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Shop branch has been deleted successfully!'
+        ], 200);
+    }
+
 }

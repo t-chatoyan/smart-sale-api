@@ -24,6 +24,8 @@ Route::group(['prefix' => 'user'], function () {
         //ShopController
         Route::resource('shop', \App\Http\Controllers\User\ShopController::class);
         Route::get('shop/{id}/restore', [\App\Http\Controllers\User\ShopController::class, 'restore']);
+        Route::post('shop-update/{id}', [\App\Http\Controllers\User\ShopController::class, 'update']);
+        Route::delete('delete-shop-branch/{id}', [\App\Http\Controllers\User\ShopController::class, 'deleteShopBranch']);
 
         //ProductController
         Route::resource('product', \App\Http\Controllers\User\ProductController::class);

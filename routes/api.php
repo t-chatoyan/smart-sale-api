@@ -37,6 +37,8 @@ Route::group(['prefix' => 'user'], function () {
 
         Route::resource('category', \App\Http\Controllers\User\CategoryController::class);
 
+        Route::resource('dashboard', \App\Http\Controllers\User\DashboardController::class);
+
     });
 });
 

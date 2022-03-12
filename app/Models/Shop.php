@@ -20,9 +20,18 @@ class Shop extends Model implements HasMedia
         'owner_id',
     ];
 
+    protected $appends = [
+        'branchesCount'
+    ];
+
     public function branches()
     {
         return $this->hasMany(ShopBranch::class);
+    }
+
+    public function getBranchesCountAttribute()
+    {
+        return $this->branches()->count();
     }
 
     public function owner()
@@ -36,5 +45,7 @@ class Shop extends Model implements HasMedia
 
         $this->addMediaConversion('small')->width(350)->format('webp');
     }
+
+
 
 }

@@ -20,16 +20,20 @@ class DashboardController extends Controller
 
         $productCount = Product::where('owner_id', $ownerId)->count();
         $shopCount = Shop::where('owner_id', $ownerId)->count();
-        $shopBranchCount = Shop::where('owner_id', $ownerId)->withCount('branches')->get();
+        $shopBranches = Shop::where('owner_id', $ownerId)->withCount('branches')->get();
+        $count = 0;
+        foreach ($shopBranches as $shopBranch) {
+            $count += $shopBranch->branches_count;
+        }
 
         $data = [
             'product_count' => $productCount,
             'shop_count' => $shopCount,
-            'branches_count' => $shopBranchCount->first()->branches_count,
+            'branches_count' => $count,
         ];
 
         return response()->json([
-            'status'   => false,
+            'status'   => true,
             'data'  => $data
         ], 200);
     }

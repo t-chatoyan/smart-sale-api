@@ -30,6 +30,7 @@ Route::group(['prefix' => 'user'], function () {
         //ProductController
         Route::resource('product', \App\Http\Controllers\User\ProductController::class);
         Route::get('product/{id}/restore', [\App\Http\Controllers\User\ProductController::class, 'restore']);
+        Route::delete('delete-product-photo/{id}/', [\App\Http\Controllers\User\ProductController::class, 'deleteProductPhoto']);
 
         //MediaController
         Route::delete('media/{uuid}', [\App\Http\Controllers\User\MediaController::class, 'destroy']);

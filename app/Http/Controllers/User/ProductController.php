@@ -164,4 +164,29 @@ class ProductController extends Controller
             'message'  => 'Product has been restored successfully!'
         ], 200);
     }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteProductPhoto(Request $request, $id)
+    {
+
+        $product = Product::where('id', $request->product_id)->first();
+        $images = $product->getMedia('product_photos');
+        $image = $images->where('id', $id)->first();
+
+        if (!empty($image)) {
+            $image->delete();
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Product photo has been deleted successfully!'
+        ], 200);
+    }
+
 }

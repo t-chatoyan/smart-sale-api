@@ -29,6 +29,11 @@ class Shop extends Model implements HasMedia
         return $this->hasMany(ShopBranch::class);
     }
 
+    public function products()
+    {
+        return $this->hasMany('App\Models\Product');
+    }
+
     public function getBranchesCountAttribute()
     {
         return $this->branches()->count();

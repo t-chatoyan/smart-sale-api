@@ -20,7 +20,7 @@ class ShopController extends Controller
      */
     public function topShops()
     {
-        $shops = Shop::withTrashed()->with('branches')->take(6);
+        $shops = Shop::withTrashed()->take(6);
         return response()->json([
             'data' => ShopResource::collection($shops->get()),
         ], 200);
@@ -33,7 +33,7 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        $shops = Shop::withTrashed()->with('branches');
+        $shops = Shop::withTrashed();
         $page = $request->input('page') ? : 1;
         $take = $request->input('count') ? : 6;
         $count = $shops->count();
@@ -74,7 +74,7 @@ class ShopController extends Controller
     public function show($id)
     {
         $shop = Shop::withTrashed()->findOrFail($id);
-        $shop->load('branches');
+        $shop->load('branches', 'products');
 
         return new ShopResource($shop);
     }

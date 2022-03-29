@@ -12,6 +12,18 @@ use Spatie\MediaLibrary\Support\MediaLibraryPro;
 
 class ProductController extends Controller
 {
+
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function topProduct()
+    {
+        $products = Product::withTrashed()->take(6);
+        return response()->json([
+            'data' => ProductResource::collection($products->get()),
+        ], 200);
+    }
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

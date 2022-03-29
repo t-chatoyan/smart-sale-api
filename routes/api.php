@@ -57,6 +57,7 @@ Route::group(['prefix' => 'customer'], function () {
 
     //ProductController
     Route::get('product', [\App\Http\Controllers\Customer\ProductController::class, 'index']);
+    Route::get('top-product', [\App\Http\Controllers\Customer\ProductController::class, 'topProduct']);
     Route::get('product/{id}', [\App\Http\Controllers\Customer\ProductController::class, 'show']);
 });
 

@@ -44,6 +44,13 @@ Route::group(['prefix' => 'user'], function () {
 
 // customer api
 Route::group(['prefix' => 'customer'], function () {
+
+
+    //Shop
+    Route::resource('shop', \App\Http\Controllers\Customer\ShopController::class);
+    Route::get('top-shop', [\App\Http\Controllers\Customer\ShopController::class, 'topShops']);
+
+
     //CategoryController
     Route::get('category', [\App\Http\Controllers\Customer\CategoryController::class, 'index']);
     Route::get('category/{id}', [\App\Http\Controllers\Customer\CategoryController::class, 'show']);

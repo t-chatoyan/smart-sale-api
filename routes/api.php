@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+header('Access-Control-Allow-Origin: *');
+//Access-Control-Allow-Origin: *
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,12 +44,13 @@ Route::group(['prefix' => 'user'], function () {
     });
 });
 
+
 // customer api
 Route::group(['prefix' => 'customer'], function () {
 
 
     //Shop
-    Route::resource('shop', \App\Http\Controllers\Customer\ShopController::class);
+    Route::resource('shops', \App\Http\Controllers\Customer\ShopController::class);
     Route::get('top-shop', [\App\Http\Controllers\Customer\ShopController::class, 'topShops']);
 
 
